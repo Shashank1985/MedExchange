@@ -82,7 +82,7 @@ router.post("/login", async (req, res) => {
         // Store token in HTTP-only cookie
         res.cookie("token", token, { httpOnly: true });
 
-        res.redirect(user.role === "doctor" ? "/dashboard/doctor" : "/dashboard/patient");
+        res.redirect(user.role === "doctor" ? "/dashboard/doctor-dashboard" : "/dashboard/patient-dashboard");
     } catch (error) {
         console.error(error);
         res.status(500).send("Login failed");
