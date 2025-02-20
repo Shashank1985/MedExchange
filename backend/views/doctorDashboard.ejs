@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h2>Welcome, <%= user.name %> (Doctor)</h2>
+
+    <h3>All Questions</h3>
+    <ul>
+        <% questions.forEach(question => { %>
+            <li>
+                <strong><%= question.title %></strong>  
+                <p><%= question.description %></p>
+                <small>Posted by <%= question.username %> on <%= question.createdAt.toDateString() %></small>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
