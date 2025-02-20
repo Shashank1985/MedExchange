@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const path = require('path');
 const dashboardRoutes = require('./routes/dashboardsRoutes');
+const cookieParser = require('cookie-parser');
 
 dotenv.config();
 connectDB();
@@ -13,6 +14,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/dashboard',dashboardRoutes);
