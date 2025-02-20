@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const path = require('path');
+const dashboardRoutes = require('./routes/dashboardsRoutes');
 
 dotenv.config();
 connectDB();
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRoutes);
+app.use('/dashboard',dashboardRoutes);
 app.get('/', (req, res) => res.redirect('/api/auth/login'));
 
 const PORT = process.env.PORT || 5000;
