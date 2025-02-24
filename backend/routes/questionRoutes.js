@@ -3,22 +3,26 @@ const Question = require('../models/Question');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-// Middleware to verify JWT and get user
-const verifyToken = (req, res, next) => {
-    const token = req.cookies.token;
-    if (!token) return res.redirect('/login');
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+// Middleware to verify JWT and get user
+const verifyToken = (req,res,next) => {
+    const token = req.cookies.token;
+    if (!token){
+        console.log("No token found, redirecting to login");
+        res.redirect('/api/auth/login');
+    }
+    try{
+        const decoded = jwt.verify(token,process.env.JWT_SECRET);
         req.user = decoded;
         next();
-    } catch (err) {
-        res.redirect('/login');
+    }catch(error){
+        console.log("Invalid token, redirecting to login");
+        res.redirect('api/auth/login');
     }
-};
+}
 
 // GET: Show submit question form
-router.get('/submit', verifyToken, (req, res) => {
+router.get('/submitQuestion', verifyToken, (req, res) => {
     res.render('submitQuestion', { user: req.user });
 });
 
@@ -37,13 +41,18 @@ router.post('/submit', verifyToken, async (req, res) => {
         });
 
         await newQuestion.save();
-        res.redirect('/dashboard');
+        res.send(`
+            <script>
+                alert('Question submitted successfully!');
+                window.location.href = '/dashboard/patient-dashboard'; 
+            </script>
+        `);
     } catch (error) {
         res.status(500).send('Error saving question');
     }
 });
 
-router.get("/question/:id",async (req,res) => {
+router.get("/:id",async (req,res) => {
     try{
         const question = await Question.findById(req.params.id);
         if(!question){
@@ -57,7 +66,7 @@ router.get("/question/:id",async (req,res) => {
 });
 
 //route for answer submitting
-router.post("/question/:id/answer",async(req,res) =>{
+router.post("/:id/answer",async(req,res) =>{
     try{
         const {answer} = req.body;
         const question = await Question.findById(req.params.id);
@@ -66,7 +75,7 @@ router.post("/question/:id/answer",async(req,res) =>{
         }
         question.answers.push(answer);
         await question.save();
-        res.redirect(`/question/${req.params.id}`)
+        res.redirect(`/questions/${req.params.id}`)
     }catch(error){
         res.status(500).send("error while submitting answer");
     }
