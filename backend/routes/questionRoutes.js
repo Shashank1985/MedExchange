@@ -43,4 +43,17 @@ router.post('/submit', verifyToken, async (req, res) => {
     }
 });
 
+router.get("/question/:id",async (req,res) => {
+    try{
+        const question = Question.findById(req.params.id);
+        if(!question){
+            return res.status(400).send("question not found");
+        }
+        res.render("questionPage",{question});
+
+    }catch(error){
+        res.status(500).send("Error while rendering the question");
+    }
+});
+
 module.exports = router;
