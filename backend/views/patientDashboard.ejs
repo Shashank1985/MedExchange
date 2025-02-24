@@ -16,9 +16,7 @@
     <ul>
         <% questions.forEach(question => { %>
             <li>
-                <strong><%= question.title %></strong>  
-                <p><%= question.description %></p>
-                <small>Posted by <%= question.username %> on <%= question.createdAt.toDateString() %></small>
+                <a href="/question/<%= question._id %>"><strong><%= question.title %></strong></a>
             </li>
         <% }) %>
     </ul>

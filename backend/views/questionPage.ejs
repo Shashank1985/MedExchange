@@ -1,0 +1,15 @@
+<h2><%= question.title %></h2>
+<p><%= question.description %></p>
+
+<h3>Submit Your Answer</h3>
+<form action="/question/<%= question._id %>/answer" method="POST">
+    <textarea name="answer" required></textarea><br>
+    <button type="submit">Submit Answer</button>
+</form>
+
+<h3>Answers</h3>
+<ul>
+    <% question.answers.forEach(answer => { %>
+        <li><%= answer %></li>
+    <% }); %>
+</ul>
