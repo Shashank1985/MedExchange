@@ -2,7 +2,7 @@
 <p><%= question.description %></p>
 
 <h3>Submit Your Answer</h3>
-<form action="/question/<%= question._id %>/answer" method="POST">
+<form action="/questions/<%= question._id %>/answer" method="POST">
     <textarea name="answer" required></textarea><br>
     <button type="submit">Submit Answer</button>
 </form>
