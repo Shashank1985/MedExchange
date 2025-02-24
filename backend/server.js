@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const path = require('path');
 const dashboardRoutes = require('./routes/dashboardsRoutes');
 const cookieParser = require('cookie-parser');
+const questionRoutes = require('./routes/questionRoutes');
 
 dotenv.config();
 connectDB();
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/dashboard',dashboardRoutes);
+app.use('/questions',questionRoutes);
 app.get('/', (req, res) => res.redirect('/api/auth/login'));
 
 const PORT = process.env.PORT || 5000;
