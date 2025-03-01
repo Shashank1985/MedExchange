@@ -1,0 +1,18 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+debug.log
+error.log
+
+# Cache & Temp Files
+*.cache
+*.tmp
+.DS_Store
