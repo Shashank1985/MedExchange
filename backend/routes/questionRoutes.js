@@ -2,6 +2,7 @@ const express = require('express');
 const Question = require('../models/Question');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const Answer = require('../models/Answer');
 
 
 // Middleware to verify JWT and get user
@@ -52,13 +53,14 @@ router.post('/submit', verifyToken, async (req, res) => {
     }
 });
 
-router.get("/:id",async (req,res) => {
+router.get("/:id",verifyToken, async (req,res) => {
     try{
         const question = await Question.findById(req.params.id);
         if(!question){
             return res.status(400).send("question not found");
         }
-        res.render("questionPage",{question});
+        const answers = await Answer.find({ questionId: req.params.id }).sort({ createdAt: -1 });
+        res.render("questionPage",{question,answers, user: req.user});
 
     }catch(error){
         res.status(500).send("Error while rendering the question");
@@ -69,12 +71,19 @@ router.get("/:id",async (req,res) => {
 router.post("/:id/answer",async(req,res) =>{
     try{
         const {answer} = req.body;
+        if(!answer){
+            res.status(400).send("Answer text is required");
+        }
         const question = await Question.findById(req.params.id);
         if(!question){
             res.status(400).send("no question found by that id");
         }
-        question.answers.push(answer);
-        await question.save();
+        const newAnswer = new Answer({
+            questionId: req.params.id,
+            userId: req.user.id,
+            text
+        });
+        await newAnswer.save();
         res.redirect(`/questions/${req.params.id}`)
     }catch(error){
         res.status(500).send("error while submitting answer");
