@@ -59,7 +59,7 @@ router.get("/:id",verifyToken, async (req,res) => {
         if(!question){
             return res.status(400).send("question not found");
         }
-        const answers = await Answer.find({ questionId: req.params.id }).sort({ createdAt: -1 });
+        const answers = await Answer.find({ questionId: req.params.id }).populate('userId', 'username').sort({ createdAt: -1 });
         res.render("questionPage",{question,answers, user: req.user});
 
     }catch(error){
@@ -90,7 +90,7 @@ router.post("/:id/answer",verifyToken,async(req,res) =>{
             answer
         });
         await newAnswer.save();
-        
+        console.log(newAnswer.userId);
         res.redirect(`/questions/${req.params.id}`)
     }catch(error){
         console.error(error);
