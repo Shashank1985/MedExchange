@@ -8,8 +8,15 @@
 </form>
 
 <h3>Answers</h3>
-<ul>
-    <% question.answers.forEach(answer => { %>
-        <li><%= answer %></li>
-    <% }); %>
-</ul>
+<% if (answers.length === 0) { %>
+    <p>No answers yet. Be the first to answer!</p>
+<% } else { %>
+    <ul>
+        <% answers.forEach(answer => { %>
+            <li>
+                <strong><%= answer.userId.username || "Anonymous" %>:</strong> <%= answer.text %>
+                <br><small>Posted on <%= new Date(answer.createdAt).toLocaleString() %></small>
+            </li>
+        <% }); %>
+    </ul>
+<% } %>
