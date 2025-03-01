@@ -68,24 +68,41 @@ router.get("/:id",verifyToken, async (req,res) => {
 });
 
 //route for answer submitting
-router.post("/:id/answer",async(req,res) =>{
+router.post("/:id/answer",verifyToken,async(req,res) =>{
     try{
         const {answer} = req.body;
+        const questionId = req.params.id;
+        const userId = req.user.id; 
         if(!answer){
             res.status(400).send("Answer text is required");
         }
+        console.log("I could get the answer from the body here");
+
         const question = await Question.findById(req.params.id);
+        console.log("I found the question here");
+
         if(!question){
             res.status(400).send("no question found by that id");
         }
+        console.log("Received answer:", answer);
+        console.log("Question ID:", questionId);
+        console.log("User ID:", userId);
+        
+        console.log("Im going to make the newe answer object here");
         const newAnswer = new Answer({
-            questionId: req.params.id,
-            userId: req.user.id,
-            text
+            questionId,
+            userId,
+            answer
         });
+        console.log("I made the new answer object here");
+
+        console.log("Im saving the object here.........");
         await newAnswer.save();
+        
+        console.log("I saveed the answer here");
         res.redirect(`/questions/${req.params.id}`)
     }catch(error){
+        console.error(error);
         res.status(500).send("error while submitting answer");
     }
 })
