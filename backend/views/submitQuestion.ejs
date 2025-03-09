@@ -6,12 +6,15 @@
 </head>
 <body>
     <h1>Submit a Medical Question</h1>
-    <form action="/questions/submit" method="POST">
+    <form action="/questions/submit" method="POST" enctype="multipart/form-data">
         <label>Title:</label>
         <input type="text" name="title" required>
         
         <label>Description:</label>
         <textarea name="description" required></textarea>
+
+        <label>Upload Image: </label>
+        <input type="file" name="image"><br>
 
         <button type="submit">Submit</button>
     </form>
