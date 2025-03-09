@@ -31,6 +31,7 @@ router.get('/submitQuestion', verifyToken, (req, res) => {
 router.post('/submit', verifyToken, async (req, res) => {
     try {
         const { title, description } = req.body;
+        const imageUrl = req.file ? req.file.location : null;
         if (!title || !description) {
             return res.status(400).send('Title and description are required');
         }
@@ -38,7 +39,8 @@ router.post('/submit', verifyToken, async (req, res) => {
         const newQuestion = new Question({
             user: req.user.id,
             title,
-            description
+            description,
+            imageUrl
         });
 
         await newQuestion.save();
