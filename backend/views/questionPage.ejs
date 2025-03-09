@@ -1,5 +1,8 @@
 <h2><%= question.title %></h2>
 <p><%= question.description %></p>
+<% if (question.imageUrl) { %>
+    <img src="<%= question.imageUrl %>" alt="Question Image" width="300">
+<% } %>
 
 <h3>Submit Your Answer</h3>
 <form action="/questions/<%= question._id %>/answer" method="POST">
