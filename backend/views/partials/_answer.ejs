@@ -1,0 +1,30 @@
+<!-- views/partials/_answer.ejs -->
+<%# This partial expects 'answer' (the answer object) and 'questionId' (the ID of the main question) %>
+
+<li class="answer-item <%= answer.parentAnswerId ? 'is-reply circle-style' : 'disc-style' %>">
+    <p>
+        <strong><%= answer.userId && answer.userId.username ? answer.userId.username : 'Unknown User' %>:</strong>
+        <%= answer.answer %>
+    </p>
+    <small>Answered on: <%= new Date(answer.createdAt).toLocaleString() %></small>
+
+    <!-- Reply Button and Form Container -->
+    <div>
+        <button type="button" class="reply-button" data-answer-id="<%= answer._id %>" style="margin-top: 5px; font-size: 0.8em;">Reply</button>
+        <div class="reply-form-container" id="reply-form-<%= answer._id %>" style="display:none; margin-top:10px; margin-left: 20px;">
+            <form action="/questions/<%= questionId %>/answer" method="POST">
+                <input type="hidden" name="parentAnswerId" value="<%= answer._id %>">
+                <textarea name="answer" rows="2" placeholder="Write your reply..." required style="width: 90%;"></textarea><br>
+                <button type="submit" style="font-size: 0.9em;">Submit Reply</button>
+            </form>
+        </div>
+    </div>
+
+    <% if (answer.replies && answer.replies.length > 0) { %>
+        <ul class="replies-list" style="padding-left: 20px; margin-top: 10px;">
+            <% answer.replies.forEach(reply => { %>
+                <%- include('_answer', { answer: reply, questionId: questionId }) %>
+            <% }) %>
+        </ul>
+    <% } %>
+</li>

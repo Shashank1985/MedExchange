@@ -1,20 +1,98 @@
+<!-- views/login.ejs -->
 <!DOCTYPE html>
-<html>
+<html lang="en"> 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; }
+        h2 { margin-bottom: 20px; color: #333; }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 22px); 
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px; 
+        }
+        button[type="submit"]:hover { background-color: #0056b3; }
+        .error-message {
+            color: red;
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            text-align: left;
+        }
+        .register-buttons a {
+            text-decoration: none;
+            display: inline-block; 
+            margin: 5px;
+        }
+        .register-buttons button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .register-buttons button.doctor { background-color: #17a2b8; color: white; }
+        .register-buttons button.doctor:hover { background-color: #138496; }
+        .register-buttons button.patient { background-color: #28a745; color: white; }
+        .register-buttons button.patient:hover { background-color: #218838; }
+        .register-prompt { margin-top: 20px; font-size: 0.9em; }
+    </style>
 </head>
 <body>
     <div class="container">
         <h2>Login</h2>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+            </div>
+        <% } %>
+
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="success-message"> 
+                <p><%= message %></p>
+            </div>
+        <% } %>
+
         <form action="/api/auth/login" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <div>
+                <label for="username" style="display:block; text-align:left; margin-bottom:5px;">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required
+                       value="<%= typeof username !== 'undefined' ? username : '' %>">
+            </div>
+            <div>
+                <label for="password" style="display:block; text-align:left; margin-bottom:5px;">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
             <button type="submit">Login</button>
         </form>
-        <div class="register-buttons">
-            <a href="/api/auth/register/doctor"><button>Register as Doctor</button></a>
-            <a href="/api/auth/register/patient"><button>Register as Patient</button></a>
+
+        <div class="register-prompt">
+            <p>Don't have an account?</p>
+            <div class="register-buttons">
+                <a href="/api/auth/register/doctor"><button class="doctor">Register as Doctor</button></a>
+                <a href="/api/auth/register/patient"><button class="patient">Register as Patient</button></a>
+            </div>
         </div>
     </div>
 </body>

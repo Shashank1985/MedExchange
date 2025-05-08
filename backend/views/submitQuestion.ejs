@@ -1,23 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Submit a Question</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Medical Question</title>
+    <!-- Link to your main stylesheet if you have one -->
+    <!-- <link rel="stylesheet" href="/css/styles.css"> -->
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #eef1f5; /* Lighter, softer background */
+            color: #4A5568; /* Darker gray for text, better contrast */
+            line-height: 1.7;
+            margin: 0;
+            padding: 20px; /* Add some padding around the body */
+            display: flex; /* For centering the form container */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure it takes at least full viewport height */
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 100%;
+            max-width: 650px; /* Slightly wider for a more spacious feel */
+            margin: 20px; /* Margin for smaller screens */
+            padding: 35px 40px; /* More padding inside */
+            background-color: #ffffff;
+            border-radius: 12px; /* Softer, larger radius */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* More subtle, modern shadow */
+            border: 1px solid #e2e8f0; /* Light border */
+        }
+
+        /* Heading */
+        .form-container h1 {
+            text-align: center;
+            color: #2D3748; /* Even darker for heading */
+            margin-bottom: 30px;
+            font-size: 1.8rem; /* Larger heading */
+            font-weight: 600; /* Semi-bold */
+            letter-spacing: -0.5px;
+        }
+
+        /* Form Group for Label + Input */
+        .form-group {
+            margin-bottom: 25px; /* More spacing between groups */
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px; /* More space below label */
+            font-weight: 500; /* Medium weight */
+            font-size: 0.95rem;
+            color: #4A5568;
+        }
+
+        /* Input Fields & Textarea */
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] { /* Style file input somewhat consistently */
+            width: 100%;
+            padding: 14px; /* More padding for a taller input */
+            border: 1px solid #CBD5E0; /* Softer border color */
+            border-radius: 6px; /* Slightly more rounded */
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: #2D3748;
+            background-color: #F7FAFC; /* Very light background for inputs */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px; /* File input padding might behave differently */
+            background-color: transparent; /* Often better for file inputs */
+        }
+
+
+        .form-group textarea {
+            min-height: 140px; /* Taller textarea */
+            resize: vertical;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group textarea:focus {
+            border-color: #4299E1; /* A nice blue for focus, or your primary color */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2); /* Softer focus ring */
+            background-color: #fff;
+        }
+        
+        .form-group input[type="text"]::placeholder,
+        .form-group textarea::placeholder {
+            color: #A0AEC0; /* Lighter placeholder text */
+            opacity: 1; /* Ensure it's visible */
+        }
+
+        /* File Input Helper Text */
+        .file-input-note {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #718096; /* Lighter gray for helper text */
+        }
+
+        /* Submit Button */
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px; /* Taller button */
+            background-image: linear-gradient(to right, #4A90E2, #007AFF); /* Gradient background */
+            color: white;
+            border: none;
+            border-radius: 8px; /* More rounded button */
+            font-size: 1.1rem;
+            font-weight: 600; /* Bolder text */
+            cursor: pointer;
+            transition: transform 0.1s ease-out, box-shadow 0.2s ease-out;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px); /* Slight lift on hover */
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        .submit-button:active {
+            transform: translateY(0px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        }
+
+
+        /* Back Link */
+        .back-link-container { /* Added a container for better centering/spacing */
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link {
+            color: #4A90E2; /* Consistent link color */
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 8px 12px; /* Make it more like a subtle button */
+            border-radius: 4px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .back-link:hover {
+            background-color: #EBF8FF; /* Very light blue background on hover */
+            text-decoration: none; /* Keep no underline on hover too */
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            background-color: #FED7D7; /* Lighter red background */
+            color: #C53030; /* Darker red text */
+            border: 1px solid #FC8181; /* Red border */
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        .error-message p {
+            margin: 0; /* Remove default paragraph margin */
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Submit a Medical Question</h1>
-    <form action="/questions/submit" method="POST" enctype="multipart/form-data">
-        <label>Title:</label>
-        <input type="text" name="title" required>
-        
-        <label>Description:</label>
-        <textarea name="description" required></textarea>
+    <div class="form-container">
+        <h1>Ask a Medical Question</h1>
 
-        <label>Upload Image: </label>
-        <input type="file" name="image"><br>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+            </div>
+        <% } %>
 
-        <button type="submit">Submit</button>
-    </form>
-    <a href="/dashboard">Back to Dashboard</a>
+        <form action="/questions/submit" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Title / Subject:</label>
+                <input type="text" id="title" name="title" placeholder="e.g., Persistent cough for 3 weeks" required
+                       value="<%= (typeof title !== 'undefined' ? title : '') %>">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Describe your question/symptoms in detail:</label>
+                <textarea id="description" name="description" placeholder="Please provide as much detail as possible, including duration, severity, any related symptoms, and what you've tried so far." required rows="5"><%= (typeof description !== 'undefined' ? description : '') %></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Upload an Image (Optional):</label>
+                <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/gif">
+                <small class="file-input-note">Accepted formats: JPG, PNG, GIF. Max file size: 5MB (example).</small>
+            </div>
+
+            <button type="submit" class="submit-button">Submit Question</button>
+        </form>
+
+        <div class="back-link-container">
+            <% if (typeof user !== 'undefined' && user && user.role === 'patient') { %>
+                <a href="/patient/patient-dashboard" class="back-link">← Back to Patient Dashboard</a>
+            <% } else if (typeof user !== 'undefined' && user && user.role === 'doctor') { %>
+                <a href="/doctor/doctor-dashboard" class="back-link">← Back to Doctor Dashboard</a>
+            <% } else { %>
+                <a href="/" class="back-link">← Back to Home</a>
+            <% } %>
+        </div>
+    </div>
 </body>
 </html>

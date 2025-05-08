@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+</head>
+<body>
+    <header>
+        <% if (user) { %>
+            <p>Logged in as: <%= user.username %> (<%= user.role %>)</p>
+            <a href="/api/auth/logout">Logout</a>
+        <% } else { %>
+            <a href="/api/auth/login">Login</a>
+        <% } %>
+    </header>
+    <main>
+        <h1>Oops! An Error Occurred</h1>
+        <p><%= message %></p>
+        <% if (error && error.stack && process.env.NODE_ENV === 'development') { %>
+            <pre><%= error.stack %></pre>
+        <% } %>
+        <a href="/">Go to Homepage</a>
+        <% if (user && user.role === 'doctor') { %>
+            <br><a href="/dashboard/doctor-dashboard">Go to Doctor Dashboard</a>
+        <% } else if (user && user.role === 'patient') { %>
+            <br><a href="/dashboard/patient-dashboard">Go to Patient Dashboard</a>
+        <% } %>
+    </main>
+</body>
+</html>

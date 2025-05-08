@@ -1,25 +1,77 @@
-<h2><%= question.title %></h2>
-<p><%= question.description %></p>
-<% if (question.imageUrl) { %>
-    <img src="<%= question.imageUrl %>" alt="Question Image" width="300">
-<% } %>
+<!-- views/questionPage.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question: <%= question.title %></title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 20px; }
+        .question-details, .answer-form-main, .answers-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        h2, h3 { margin-top: 0; }
+        textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 3px;}
+        button { padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .answer-item { border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 10px; }
+        .answer-item:last-child { border-bottom: none; }
+        ul { list-style: none; padding-left: 0; }
+        .replies-list ul { padding-left: 20px; /* Indent nested lists further if needed */ }
+    </style>
+</head>
+<body>
+    <div class="question-details">
+        <h2><%= question.title %></h2>
+        <p><strong>Asked by: <%= question.user ? question.user.username : 'Unknown User' %></strong> on <%= new Date(question.createdAt).toLocaleString() %></p>
+        <p><%= question.description %></p>
+        <% if (question.imageUrl) { %>
+            <img src="<%= question.imageUrl %>" alt="Question Image" style="max-width: 100%; height: auto; max-height: 400px; border-radius: 5px;">
+        <% } %>
+    </div>
 
-<h3>Submit Your Answer</h3>
-<form action="/questions/<%= question._id %>/answer" method="POST">
-    <textarea name="answer" required></textarea><br>
-    <button type="submit">Submit Answer</button>
-</form>
+    <div class="answer-form-main">
+        <h3>Submit Your Answer (to the Question)</h3>
+        <form action="/questions/<%= question._id %>/answer" method="POST">
+            <textarea name="answer" rows="4" placeholder="Write your answer to the question..." required></textarea><br>
+            <button type="submit">Submit Answer</button>
+        </form>
+    </div>
 
-<h3>Answers</h3>
-<% if (answers.length === 0) { %>
-    <p>No answers yet. Be the first to answer!</p>
-<% } else { %>
-    <ul>
-        <% answers.forEach(answer => { %>
-            <li>
-                <strong><%= answer.userId.username %>:</strong> <%= answer.answer %>
-                <br><small>Posted on <%= new Date(answer.createdAt).toLocaleString() %></small>
-            </li>
-        <% }); %>
-    </ul>
-<% } %>
+    <div class="answers-container">
+        <h3>Answers</h3>
+        <% if (answers.length === 0) { %>
+            <p>No answers yet. Be the first to answer!</p>
+        <% } else { %>
+            <ul>
+                <% answers.forEach(answer => { %>
+                    <%# Call the partial for each top-level answer %>
+                    <%- include('partials/_answer', { answer: answer, questionId: question._id }) %>
+                <% }); %>
+            </ul>
+        <% } %>
+    </div>
+
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('reply-button')) {
+                const answerId = event.target.dataset.answerId;
+                const formContainer = document.getElementById(`reply-form-${answerId}`);
+                if (formContainer) {
+                    // Hide all other open reply forms
+                    document.querySelectorAll('.reply-form-container').forEach(fc => {
+                        if (fc.id !== `reply-form-${answerId}`) {
+                            fc.style.display = 'none';
+                        }
+                    });
+                    // Toggle the current one
+                    formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

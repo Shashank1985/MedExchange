@@ -4,22 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Dashboard</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { max-width: 900px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        header h2 { margin: 0; }
+        .action-button, .logout-button { 
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            border: none; 
+            cursor: pointer; 
+            display: inline-block; 
+        }
+        .action-button { background-color: #007bff; margin-right: 10px;} /* Blue for actions */
+        .action-button:hover { background-color: #0056b3; }
+        .logout-button { background-color: #dc3545; }
+        .logout-button:hover { background-color: #c82333; }
+
+        .dashboard-actions { margin-bottom: 20px; }
+
+        h3 { color: #333; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+        ul { list-style-type: none; padding: 0; }
+        .question-item { background-color: #f9f9f9; border: 1px solid #ddd; margin-bottom: 10px; padding: 15px; border-radius: 4px; }
+        .question-item a { text-decoration: none; color: #007bff; font-weight: bold; }
+        .question-item a:hover { text-decoration: underline; }
+        .question-details { font-size: 0.9em; color: #555; margin-top: 5px; }
+        .question-details .asked-by { font-style: italic; }
+        .no-questions { color: #777; }
+    </style>
 </head>
 <body>
-    <h2>Welcome, <%= user.username %></h2>
+    <div class="container">
+        <header>
+            <% if (user && user.username) { %>
+                <h2>Welcome, <%= user.username %>!</h2>
+            <% } else { %>
+                <h2>Patient Dashboard</h2>
+            <% } %>
+            <div>
+                <a href="/questions/submitQuestion" class="action-button">Ask a New Question</a>
+                <a href="/api/auth/logout" class="logout-button">Logout</a>
+            </div>
+        </header>
 
-    <!-- Button to Redirect to Submit Question Page -->
-    <a href = '/questions/submitQuestion'>
-    <button>Submit a Question</button>
-    </a>
-    <h3>Recent Questions</h3>
-    <ul>
-        <% questions.forEach(question => { %>
-            <li>
-                <a href="/questions/<%= question._id %>"><strong><%= question.title %></strong></a>
-            </li>
-        <% }) %>
-    </ul>
+        <div class="dashboard-actions">
+        </div>
+
+        <h3>Your Recent Questions / All Questions</h3>
+
+        <% if (questions && questions.length > 0) { %>
+            <ul id="questionsList">
+                <% questions.forEach(question => { %>
+                    <li class="question-item">
+                        <a href="/questions/<%= question._id %>"><strong><%= question.title %></strong></a>
+                        <div class="question-details">
+                            <p><%= question.description.substring(0, 150) %><% if (question.description.length > 150) { %>...<% } %></p>
+                            <% if (question.user && question.user.username) { %>
+                                <span class="asked-by">Asked by: <%= question.user.username %></span>
+                                
+                            <% } else { %>
+                                <span class="asked-by">Asked by: Anonymous</span>
+                            <% } %>
+                            - <small>On: <%= new Date(question.createdAt).toLocaleDateString() %></small>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p class="no-questions">You haven't asked any questions yet, or no questions found.</p>
+        <% } %>
+    </div>
+
 </body>
 </html>

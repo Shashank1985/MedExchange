@@ -1,10 +1,93 @@
-<form action="/api/auth/register" method="POST">
-    <input type="hidden" name="role" value="doctor">
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="number" name="age" placeholder="Age" required>
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="text" name="specialty" placeholder="Specialty" required>
-    <input type="number" name="experience" placeholder="Years of Experience" required>
-    <button type="submit">Register</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register as Doctor</title>
+    <style>
+        .error-message {
+            color: red;
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        form { max-width: 400px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        input[type="text"], input[type="number"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Doctor Registration</h1>
+
+    <%# Check if an 'error' variable was passed from the backend %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-message">
+            <p><%= error %></p>
+        </div>
+    <% } %>
+
+    <%# Check if a 'message' variable was passed (e.g., for success, though not typical for re-render on error) %>
+    <% if (typeof message !== 'undefined' && message) { %>
+        <div class="success-message"> <%# You'd style .success-message similarly %>
+            <p><%= message %></p>
+        </div>
+    <% } %>
+
+    <form action="/api/auth/register" method="POST">
+        <input type="hidden" name="role" value="doctor">
+
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Full Name" required
+                   value="<%= typeof name !== 'undefined' ? name : '' %>">
+        </div>
+        <div>
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" placeholder="Age" required min="1" max="120"
+                   value="<%= typeof age !== 'undefined' ? age : '' %>">
+        </div>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Username (5-25 chars)" required minlength="5" maxlength="25"
+                   value="<%= typeof username !== 'undefined' ? username : '' %>">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+        </div>
+        <div>
+            <label for="specialty">Specialty:</label>
+            <input type="text" id="specialty" name="specialty" placeholder="e.g., Cardiology" required
+                   value="<%= typeof specialty !== 'undefined' ? specialty : '' %>">
+        </div>
+        <div>
+            <label for="experience">Years of Experience:</label>
+            <input type="number" id="experience" name="experience" placeholder="Years of Experience (0-80)" required min="0" max="80"
+                   value="<%= typeof experience !== 'undefined' ? experience : '' %>">
+        </div>
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="/api/auth/login">Login here</a></p>
+    <p>Register as a patient instead? <a href="/api/auth/register/patient">Register as Patient</a></p>
+
+</body>
+</html>
