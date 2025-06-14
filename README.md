@@ -1,7 +1,7 @@
-Medical Q&A website build with Express, Node, MongoDB and EJS. 
-Skeletal UI for now (need to fix later) fixed on 5th may 2025
-Patients ask questions
-Doctors answer them
+**MedExchange**
 
+Q&A platform for doctors and patients. Similar to stack exchange. Tech stack: EJS, Express.js, MongoDB, Node.js
 
-added nested comments
+Implemented JWT authentication for secure log in. Implemented role based dashboards. 
+
+Patients can ask questions, Doctors can answer them. Other doctors can reply to other answers, and it will be represented as a tree with nested comments.
